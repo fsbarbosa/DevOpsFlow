@@ -1,0 +1,4 @@
+github.com/gorilla/mux v1.8.0 h1:x8iE8BNf5UZo5CceUpYBUxg/vgOcfoy8EFVX/s2dmzA=
+github.com/gorilla/mux v1.8.0/go.mod h1:TJ2uHNveOx/cyGSjjk6TET70rG0zIu1cv7drxhII3Xk=
+github.com/sirupsen/logrus v1.8.1 h1:7a8b+7uYbwPvUhMuOIoVdF6hQGBURiA+sk4yQbc4EBU=
+github.com/sirupsen/logrus v1.8.1/go.mod h1:3AwCUg/RjIIj63WhbfliYo+UzG7J2SO2dDxmLB/OiNZ=
