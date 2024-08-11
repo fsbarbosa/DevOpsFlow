@@ -1,1 +1,1 @@
-# DevOpsFlow
+DevOpsFlow is a Go-based application designed to streamline Continuous Integration (Continuous Deployment) CI/CD pipelines. It initializes the application, configures routes for CI/CD processes, and efficiently manages incoming requests. This project is geared towards automation and simplifying deployment tasks, ensuring a seamless workflow for developers and operations teams.
