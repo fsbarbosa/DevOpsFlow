@@ -1,36 +1,50 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
-	"os"
+    "fmt"
+    "log"
+    "net/http"
+    "os"
+    "time"
 
-	"github.com/gorilla/mux"
+    "github.com/gorilla/mux"
 )
 
 func loadEnvVars() {
-	os.Setenv("PORT", "8080")
+    os.Setenv("PORT", "8080")
 }
 
 func main() {
-	loadEnvVars()
+    loadEnvVars()
 
-	router := mux.NewRouter()
+    router := mux.NewRouter()
 
-	router.HandleFunc("/deploy", DeployHandler).Methods("POST")
-	router.HandleFunc("/test", TestHandler).Methods("POST")
+    loggedRouter := logRequest(router)
 
-	port := os.Getenv("PORT")
-	fmt.Printf("Server started on port %s\n", port)
+    router.HandleFunc("/deploy", DeployHandler).Methods("POST")
+    router.HandleFunc("/test", TestHandler).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":"+port, router))
+    port := os.Getenv("PORT")
+    fmt.Printf("Server started on port %s\n", port)
+
+    log.Fatal(http.ListenAndServe(":"+port, loggedRouter))
 }
 
 func DeployHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Deploying application...")
+    fmt.Fprintln(w, "Deploying application...")
 }
 
 func TestHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Running tests...")
+    fmt.Fprintln(w, "Running tests...")
+}
+
+func logRequest(next http.Handler) http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        startTime := time.Now()
+        log.Printf("Started %s %s", r.Method, r.URL.Path)
+
+        next.ServeHTTP(w, r) 
+
+        log.Printf("Completed %s in %v", r.URL.Path, time.Since(startTime))
+    })
 }
