@@ -1,14 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"os"
 )
 
 type Environment struct {
-	Name          string
-	DeployPath    string
-	BuildCommand  string
-	TestCommand   string
+	Name           string
+	DeployPath     string
+	BuildCommand   string
+	TestCommand    string
 	ReleaseCommand string
 }
 
@@ -24,31 +25,38 @@ func main() {
 	pipelineConfig := PipelineConfig{
 		Environments: []Environment{
 			{
-				Name:          "development",
-				DeployPath:    developmentDeployPath,
-				BuildCommand:  "go build -o devApp",
-				TestCommand:   "go test ./...",
+				Name:           "development",
+				DeployPath:     developmentDeployPath,
+				BuildCommand:   "go build -o devApp",
+				TestCommand:    "go test ./...",
 				ReleaseCommand: "go build -o devAppRelease",
 			},
 			{
-				Name:          "staging",
-				DeployPath:    stagingDeployPath,
-				BuildCommand:  "go build -o stagingApp",
-				TestCommand:   "go test --race ./...",
+				Name:           "staging",
+				DeployPath:     stagingDeployPath,
+				BuildCommand:   "go build -o stagingApp",
+				TestCommand:    "go test --race ./...",
 				ReleaseCommand: "go build -o stagingAppRelease",
 			},
 			{
-				Name:          "production",
-				DeployPath:    productionDeployPath,
-				BuildCommand:  "go build -ldflags=\"-s -w\" -o prodApp",
-				TestCommand:   "go test -v ./...",
+				Name:           "production",
+				DeployPath:     productionDeployPath,
+				BuildCommand:   "go build -ldflags=\"-s -w\" -o prodApp",
+				TestCommand:    "go test -v ./...",
 				ReleaseCommand: "go build -ldflags=\"-s -w\" -o prodAppRelease",
 			},
 		},
 	}
 
 	for _, env := range pipelineConfig.Environments {
-		if env.Name == "development" {
-		}
+		executeEnvironmentCommands(env)
 	}
+}
+
+func executeEnvironmentCommands(env Environment) {
+	fmt.Printf("Executing commands for environment: %s\n", env.Name)
+	fmt.Printf("Build command: %s\n", env.BuildCommand)
+	fmt.Printf("Test command: %s\n", env.TestCommand)
+	fmt.Printf("Release command: %s\n", env.ReleaseCommand)
+	fmt.Println("Commands simulated. Replace with actual execution as needed.")
 }
