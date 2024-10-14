@@ -4,7 +4,13 @@ require('dotenv').config();
 function triggerPipeline() {
   try {
     console.log('Triggering CI/CD pipeline...');
-    exec('ci-cd-command-to-trigger-pipeline', (error, stdout, stderr) => {
+
+    const commandToTriggerPipeline = 'ci-cd-command-to-trigger-pipeline';
+    if (!commandToTriggerPipeline) {
+      throw new Error('No command provided to trigger the pipeline');
+    }
+
+    exec(commandToTriggerPipeline, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error triggering pipeline: ${error.message}`);
         sendNotification(`Pipeline Trigger Error: ${error.message}`);
@@ -26,10 +32,14 @@ function triggerPipeline() {
 
 function checkPipelineStatus() {
   console.log('Checking pipeline status...');
-  
+
   try {
     setTimeout(() => {
       const pipelineStatus = 'success';
+      if (!pipelineStatus) {
+        throw new Error('Failed to retrieve the pipeline status.');
+      }
+
       if (pipelineStatus === 'success') {
         console.log('Pipeline executed successfully.');
         sendNotification('Pipeline executed successfully.');
@@ -46,6 +56,10 @@ function checkPipelineStatus() {
 
 function sendNotification(message) {
   try {
+    if (!process.env.NOTIFICATION_SERVICE_ENDPOINT) {
+      throw new Error('Notification service endpoint is not configured.');
+    }
+
     console.log(`Sending notification: ${message}`);
   } catch (exception) {
     console.error(`Exception sending notification: ${exception}`);
